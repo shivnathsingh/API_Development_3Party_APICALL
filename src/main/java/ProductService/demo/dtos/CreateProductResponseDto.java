@@ -1,6 +1,7 @@
 package ProductService.demo.dtos;
 
 import ProductService.demo.models.Product;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class CreateProductResponseDto {
 
@@ -10,8 +11,8 @@ public class CreateProductResponseDto {
     private double price;
     private String imageUrl;
     private String categoryName;
-
-    public CreateProductResponseDto toDto(Product product)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public CreateProductResponseDto toProductResponseDto(Product product)
     {
         CreateProductResponseDto createProductResponseDto=new CreateProductResponseDto();
         createProductResponseDto.setId(product.getId());

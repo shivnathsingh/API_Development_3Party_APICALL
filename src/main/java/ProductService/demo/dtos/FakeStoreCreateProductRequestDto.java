@@ -11,7 +11,7 @@ public class FakeStoreCreateProductRequestDto {
     private String image;
     private String category;
 
-    public FakeStoreCreateProductRequestDto toFakeStore(Product product)
+    public static FakeStoreCreateProductRequestDto toFakeStore(Product product)
     {
         FakeStoreCreateProductRequestDto fkrequest=new FakeStoreCreateProductRequestDto();
         fkrequest.setTitle(product.getTitle());

@@ -1,7 +1,9 @@
 package ProductService.demo.dtos;
 
 import ProductService.demo.models.Product;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FakeStoreCreateProductResponseDto {
 
     private Long id;
@@ -12,7 +14,7 @@ public class FakeStoreCreateProductResponseDto {
     private String category;
 
 
-    public Product toProduct(FakeStoreCreateProductResponseDto fk)
+    public static Product toProduct(FakeStoreCreateProductResponseDto fk)
     {
         Product product=new Product();
         product.setId(fk.getId());
@@ -22,6 +24,17 @@ public class FakeStoreCreateProductResponseDto {
         product.setDescription(fk.getDescription());
         product.setCategoryName(fk.getCategory());
         return product;
+    }
+
+    public static FakeStoreCreateProductResponseDto toFakeStore(Product product)
+    {
+        FakeStoreCreateProductResponseDto fkresponse=new FakeStoreCreateProductResponseDto();
+        fkresponse.setTitle(product.getTitle());
+        fkresponse.setCategory(product.getCategoryName());
+        fkresponse.setDescription(product.getDescription());
+        fkresponse.setPrice(product.getPrice());
+        fkresponse.setCategory(product.getCategoryName());
+        return fkresponse;
     }
 
     public Long getId() {
