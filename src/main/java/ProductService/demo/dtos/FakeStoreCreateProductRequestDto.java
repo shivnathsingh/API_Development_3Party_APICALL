@@ -1,6 +1,7 @@
 package ProductService.demo.dtos;
 
 
+import ProductService.demo.models.Category;
 import ProductService.demo.models.Product;
 
 // this DTO will convert into the formate fakestore want
@@ -15,10 +16,10 @@ public class FakeStoreCreateProductRequestDto {
     {
         FakeStoreCreateProductRequestDto fkrequest=new FakeStoreCreateProductRequestDto();
         fkrequest.setTitle(product.getTitle());
-        fkrequest.setCategory(product.getCategoryName());
         fkrequest.setDescription(product.getDescription());
         fkrequest.setPrice(product.getPrice());
-        fkrequest.setCategory(product.getCategoryName());
+        fkrequest.setImage(product.getImageUrl());
+        fkrequest.setCategory(product.getCategory().getDescription());
         return fkrequest;
     }
 

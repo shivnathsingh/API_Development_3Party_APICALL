@@ -1,5 +1,6 @@
 package ProductService.demo.dtos;
 
+import ProductService.demo.models.Category;
 import ProductService.demo.models.Product;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -19,10 +20,12 @@ public class FakeStoreCreateProductResponseDto {
         Product product=new Product();
         product.setId(fk.getId());
         product.setTitle(fk.getTitle());
+        product.setDescription(fk.getDescription());
         product.setPrice(fk.getPrice());
         product.setImageUrl(fk.getImage());
-        product.setDescription(fk.getDescription());
-        product.setCategoryName(fk.getCategory());
+        Category category1=new Category();
+        category1.setDescription(fk.getCategory());
+        product.setCategory(category1);
         return product;
     }
 
@@ -30,10 +33,10 @@ public class FakeStoreCreateProductResponseDto {
     {
         FakeStoreCreateProductResponseDto fkresponse=new FakeStoreCreateProductResponseDto();
         fkresponse.setTitle(product.getTitle());
-        fkresponse.setCategory(product.getCategoryName());
+        fkresponse.setCategory(product.getCategory().getDescription());
         fkresponse.setDescription(product.getDescription());
         fkresponse.setPrice(product.getPrice());
-        fkresponse.setCategory(product.getCategoryName());
+
         return fkresponse;
     }
 

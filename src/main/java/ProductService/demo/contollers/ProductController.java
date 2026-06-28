@@ -6,89 +6,86 @@ import ProductService.demo.dtos.FakeStoreCreateProductRequestDto;
 import ProductService.demo.dtos.FakeStoreCreateProductResponseDto;
 import ProductService.demo.models.Product;
 import ProductService.demo.services.ProductService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController // to make this class as controleer to recieve call from dispacher
-@RequestMapping("/products")
-
+@RestController // to make this class as controller to receive call from dispatcher
+@RequestMapping("/products")   // To declare this as base url
+@Validated                    // to enable validation for path variable
 
 public class ProductController {
 
 
-    ProductService productService;
+//    ProductService productService;
 
+//    ProductController ( ProductService productService)
+//    {
+//        this.productService=productService;
+//    }
 
-
-    ProductController (@Qualifier("fakestoreproductservice") ProductService productService)
-    {
-        this.productService=productService;
-    }
+    @Autowired
+//    @Qualifier("productServiceDBImpl")
+    private ProductService productService;
 
 
     // ==================== Fetch List of All Product
     @GetMapping("")
-    public List<CreateProductResponseDto>  getAllProduct()
+    public ResponseEntity<List<CreateProductResponseDto>>  getAllProduct()
     {
         System.out.println("Fetching all products ");
         List<Product> products=productService.getAllProduct();
-        List<CreateProductResponseDto> responseDtos=new ArrayList<>();
-        CreateProductResponseDto responseDto=new CreateProductResponseDto();
-        for(Product product:products)
-        {
-            responseDtos.add(responseDto.toProductResponseDto(product));
-        }
+        List<CreateProductResponseDto> responseDtos=products.stream().map(CreateProductResponseDto::toProductResponseDto).toList();
         System.out.println("All products fetched");
-        return responseDtos;
+        return ResponseEntity.ok(responseDtos);
 
     }
 
 
     //=============CREATE PRODUCT ==================
     @PostMapping ("")
-    public CreateProductResponseDto createProducts(@RequestBody CreateProductRequestDto createProductRequestDto)
+    public ResponseEntity<CreateProductResponseDto> createProducts(@Valid @RequestBody CreateProductRequestDto productRequestDto)
     {
-            CreateProductResponseDto c = new CreateProductResponseDto();
-           Product product =createProductRequestDto.toProduct(createProductRequestDto);
-//           Product response =productService.createProduct(product);
-
-           return c.toProductResponseDto(product);
+            CreateProductRequestDto.printProductRequestDto(productRequestDto);
+            Product product= CreateProductRequestDto.toProduct(productRequestDto);
+            Product savedProduct =productService.createProduct(product);
+            CreateProductResponseDto productResponseDto=CreateProductResponseDto.toProductResponseDto(savedProduct);
+            return ResponseEntity.status(HttpStatus.CREATED).body(productResponseDto);
     }
 
-    @GetMapping("{productId}/{catId}")
-    public Product singleProduct(@PathVariable("productId") Long productId,
-                                 @PathVariable("catId") Long categoryId)
+    @GetMapping("/{productId}")
+    public ResponseEntity<CreateProductResponseDto> getSingleProduct(  @PathVariable("productId") @Positive Long productId)
     {
-
-        Product product=new Product();
-        product.setTitle("Iphone");
-        product.setId(productId);
-
-        return  product;
-
-
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CreateProductResponseDto> getSingleProduct(@PathVariable("id") Long productId)
-    {
-        if(productId<=0){
-         return  ResponseEntity.badRequest().build();
-        }
-        System.out.println("Fetching Product with id "+productId);
-        CreateProductResponseDto responseDto=new CreateProductResponseDto();
         Product product = productService.getSingleProduct(productId);
-        System.out.println("Product found with id "+productId);
-        if(product!=null)
-        return new ResponseEntity<>(responseDto.toProductResponseDto(product),HttpStatus.OK);
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+        CreateProductResponseDto responseDto=CreateProductResponseDto.toProductResponseDto(product);
+        return ResponseEntity.ok(responseDto);
+
     }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<CreateProductResponseDto> getSingleProduct(@PathVariable("id") Long productId)
+//    {
+//        if(productId<=0){
+//         return  ResponseEntity.badRequest().build();
+//        }
+//        System.out.println("Fetching Product with id "+productId);
+//        CreateProductResponseDto responseDto=new CreateProductResponseDto();
+//        Product product = productService.getSingleProduct(productId);
+//        System.out.println("Product found with id "+productId);
+//        if(product!=null)
+//        return new ResponseEntity<>(responseDto.toProductResponseDto(product),HttpStatus.OK);
+//
+//        return new ResponseEntity(HttpStatus.NOT_FOUND);
+//    }
 
 
     @RequestMapping(name = "SHIV",value = "/product/own")

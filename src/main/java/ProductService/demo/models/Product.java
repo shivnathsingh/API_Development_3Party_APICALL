@@ -1,21 +1,38 @@
 package ProductService.demo.models;
 
-public class Product {
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 
-    private Long id;
+@Entity
+public class Product extends BaseModle {
+
+
     private String title;
     private String description;
     private double price;
     private String imageUrl;
-    private String categoryName;
+    @ManyToOne
+    private Category category;
 
-    public Long getId() {
-        return id;
+    public static void printProduct(Product product)
+    {
+        if(product==null)
+        {
+            System.out.println("In printProduct Method product is passed as null ");
+            return ;
+        }
+        System.out.println("ProductId "+product.getId()
+        +" ProductTitle "+product.getTitle()
+        +" ProductDescription "+product.getDescription()
+        +" ProductPrice "+product.getPrice()
+        +" ProductImageUrl "+product.getImageUrl()
+        +" ProductCategoryID "+product.getCategory().getId()
+        +" ProductCategoryDescription "+product.getCategory().getDescription()
+        );
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+
 
     public String getTitle() {
         return title;
@@ -49,11 +66,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
