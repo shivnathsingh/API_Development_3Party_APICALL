@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -39,15 +40,28 @@ public class ProductController {
 
 
     // ==================== Fetch List of All Product
-    @GetMapping("")
-    public ResponseEntity<List<CreateProductResponseDto>>  getAllProduct()
-    {
-        System.out.println("Fetching all products ");
-        List<Product> products=productService.getAllProduct();
-        List<CreateProductResponseDto> responseDtos=products.stream().map(CreateProductResponseDto::toProductResponseDto).toList();
-        System.out.println("All products fetched");
-        return ResponseEntity.ok(responseDtos);
+//    @GetMapping("")
+//    public ResponseEntity<Page<CreateProductResponseDto>>  getAllProduct(@RequestParam("page") int page,@RequestParam("offset") int offset)
+//    {
+//        System.out.println("Fetching all products ");
+//        Page<Product> products=productService.getAllProduct(page,offset);
+//        Page<CreateProductResponseDto> responseDtos= (Page<CreateProductResponseDto>) products.stream().map(CreateProductResponseDto::toProductResponseDto).toList();
+//        System.out.println("All products fetched");
+//        return ResponseEntity.ok(responseDtos);
+//
+//    }
 
+    @GetMapping
+    public ResponseEntity<Page<CreateProductResponseDto>> getAllProduct(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Page<Product> products = productService.getAllProduct(page, size);
+
+        Page<CreateProductResponseDto> responseDtos =
+                products.map(CreateProductResponseDto::toProductResponseDto);
+
+        return ResponseEntity.ok(responseDtos);
     }
 
 

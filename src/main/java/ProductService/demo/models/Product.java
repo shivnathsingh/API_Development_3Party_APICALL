@@ -1,10 +1,13 @@
 package ProductService.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Product extends BaseModle {
 
 
@@ -13,8 +16,8 @@ public class Product extends BaseModle {
     private double price;
     private String imageUrl;
     @ManyToOne
+//    @JsonManagedReference // to tell Json don't go in cycle
     private Category category;
-
     public static void printProduct(Product product)
     {
         if(product==null)

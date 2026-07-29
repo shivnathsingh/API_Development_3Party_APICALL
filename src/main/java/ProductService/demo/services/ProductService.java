@@ -1,17 +1,16 @@
 package ProductService.demo.services;
 
-import ProductService.demo.dtos.CreateProductRequestDto;
-import ProductService.demo.dtos.CreateProductResponseDto;
 import ProductService.demo.models.Product;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public interface ProductService {
 
     Product createProduct(Product product);
-    List<Product> getAllProduct();
+    Page<Product> getAllProduct(int page, int size);
     Product getSingleProduct(Long productId);
     Product replaceProduct(Long productId,Product product);
 

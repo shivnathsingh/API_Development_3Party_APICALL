@@ -3,13 +3,12 @@ package ProductService.demo.services;
 import ProductService.demo.dtos.FakeStoreCreateProductRequestDto;
 import ProductService.demo.dtos.FakeStoreCreateProductResponseDto;
 import ProductService.demo.models.Product;
-import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.List;
 
 //@Service
 
@@ -49,23 +48,28 @@ public class ProductServiceFakeStoreImpl implements ProductService{
     }
 
     @Override
-    public List<Product> getAllProduct() {
-        //https://fakestoreapi.com/products
-        String url="https://fakestoreapi.com/products";
-        List<Product> products=new ArrayList<>();
-        FakeStoreCreateProductResponseDto fk=new FakeStoreCreateProductResponseDto();
-       FakeStoreCreateProductResponseDto responseDto[]= restTemplate.getForObject(url, FakeStoreCreateProductResponseDto[].class);
-       if(responseDto==null)
-       {
-           throw new RuntimeException("List of product not found");
-       }
-       for(FakeStoreCreateProductResponseDto reponse:responseDto)
-       {
-           products.add(fk.toProduct(reponse));
-       }
-       return products;
-       
+    public Page<Product> getAllProduct(int page, int offset) {
+        return null;
     }
+
+//    @Override
+//    public Page<Product> getAllProduct(int page, int offset) {
+//        //https://fakestoreapi.com/products
+//        String url="https://fakestoreapi.com/products";
+//        ArrayList<Object> products=new ArrayList<>();
+//        FakeStoreCreateProductResponseDto fk=new FakeStoreCreateProductResponseDto();
+//       FakeStoreCreateProductResponseDto responseDto[]= restTemplate.getForObject(url, FakeStoreCreateProductResponseDto[].class);
+//       if(responseDto==null)
+//       {
+//           throw new RuntimeException("List of product not found");
+//       }
+//       for(FakeStoreCreateProductResponseDto reponse:responseDto)
+//       {
+////           products.add(fk.toProduct(reponse));
+//       }
+//       return products;
+//
+//    }
 
     @Override
     public Product getSingleProduct(Long productId) {

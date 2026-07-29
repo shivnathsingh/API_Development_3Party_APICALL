@@ -1,15 +1,17 @@
 package ProductService.demo.services;
 
-import ProductService.demo.dtos.CreateProductResponseDto;
 import ProductService.demo.models.Category;
 import ProductService.demo.models.Product;
 import ProductService.demo.repositories.CategoryRepo;
 import ProductService.demo.repositories.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -67,11 +69,12 @@ public class ProductServiceDBImpl implements ProductService{
     }
 
     @Override
-    public List<Product> getAllProduct() {
+    public Page<Product> getAllProduct(int page, int size) {
 
         System.out.println("Db Storage List of  Product Service called");
 
-        List<Product> products=productRepo.findAll();
+        Pageable pageable= PageRequest.of(page,size);
+        Page<Product> products=productRepo.findAll(pageable);
         if(products.isEmpty())
         {
             throw new RuntimeException("No Product available in Inventory");
